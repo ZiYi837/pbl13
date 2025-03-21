@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invertebrate Flashcard Quiz</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .flashcard { width: 300px; height: 200px; margin: auto; padding: 20px; background: lightblue; display: flex; align-items: center; justify-content: center; font-size: 20px; border: 2px solid black; cursor: pointer; }
+        .hidden { display: none; }
+        .options { margin-top: 20px; }
+        .option { padding: 10px; margin: 5px; background: lightgray; display: inline-block; cursor: pointer; border: 1px solid black; }
+        .correct { background: lightgreen; }
+        .incorrect { background: lightcoral; }
+    </style>
+</head>
+<body>
+    <h1>Invertebrate Flashcard Quiz</h1>
+    <p>Click the flashcard to reveal the animal, then select the correct invertebrate group.</p>
+    
+    <div class="flashcard" id="flashcard">Click to Reveal</div>
+    
+    <div class="options">
+        <div class="option" data-group="arthropods">Arthropods</div>
+        <div class="option" data-group="annelids">Annelids</div>
+        <div class="option" data-group="cnidarians">Cnidarians</div>
+        <div class="option" data-group="mollusks">Mollusks</div>
+        <div class="option" data-group="echinoderms">Echinoderms</div>
+        <div class="option" data-group="poriferans">Poriferans</div>
+    </div>
+    
+    <p id="result"></p>
+    <button onclick="nextFlashcard()">Next</button>
+    
+    <script>
+        const flashcard = document.getElementById('flashcard');
+        const options = document.querySelectorAll('.option');
+        const resultText = document.getElementById('result');
+
+        const flashcards = [
+            { name: "Butterfly", group: "arthropods" },
+            { name: "Earthworm", group: "annelids" },
+            { name: "Jellyfish", group: "cnidarians" },
+            { name: "Octopus", group: "mollusks" },
+            { name: "Spider", group: "arthropods" },
+            { name: "Sea Star", group: "echinoderms" },
+            { name: "Crab", group: "arthropods" },
+            { name: "Sponge", group: "poriferans" }
+        ];
+        
+        let currentCard = 0;
+        let revealed = false;
+
+        function showFlashcard() {
+            flashcard.textContent = "Click to Reveal";
+            resultText.textContent = "";
+            options.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+            });
+            revealed = false;
+        }
+
+        flashcard.addEventListener('click', () => {
+            if (!revealed) {
+                flashcard.textContent = flashcards[currentCard].name;
+                revealed = true;
+            }
+        });
+
+        options.forEach(option => {
+            option.addEventListener('click', () => {
+                if (revealed) {
+                    if (option.getAttribute('data-group') === flashcards[currentCard].group) {
+                        option.classList.add('correct');
+                        resultText.textContent = "Correct!";
+                    } else {
+                        option.classList.add('incorrect');
+                        resultText.textContent = "Wrong! Try Again.";
+                    }
+                }
+            });
+        });
+        
+        function nextFlashcard() {
+            currentCard = (currentCard + 1) % flashcards.length;
+            showFlashcard();
+        }
+        
+        showFlashcard();
+    </script>
+</body>
+</html>
